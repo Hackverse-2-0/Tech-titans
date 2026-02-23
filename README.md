@@ -29,13 +29,49 @@ To ensure fairness and track your progress, this hackathon features a strict two
 *Please overwrite the information below with your actual project details before the final evaluation.*
 
 ### Team Name: 
-[Enter your team name]
+[Tech Titans]
 
 ### Project Name:
-[Enter your project name]
+[Agrilink]
 
 ### Project Description:
-[Write a brief 1-2 paragraph description of what your project does, the problem it solves, and the technologies used.]
+[AgriLink is a smart farmer–buyer marketplace designed to solve major problems in the current agricultural system. Many farmers struggle to get fair prices due to middlemen, lack direct communication with buyers, and face inefficient order management. AgriLink provides a centralized digital platform where farmers can list crops and buyers can place orders directly. The system includes real-time order tracking, multilingual chat support, and secure role-based authentication. With features like analytics dashboards and live communication using Socket.IO, the platform improves transparency, builds trust, streamlines the supply chain, and promotes digital adoption in rural agriculture markets. We used reactjs ,nodejs,expressjs,socket.io,JWT token,PostgreSQL,Prisma ORM]
 
 ### Setup & Installation Instructions:
-[Provide clear, step-by-step instructions on how the judges can run your project locally. Include any commands needed to install dependencies and start the application.]
+[Prerequisites
+
+1.Make sure you have installed:
+
+Node.js (v18 or above)
+
+npm
+
+PostgreSQL
+
+Git
+2. Dependencies
+Frontend:
+
+React.js
+
+React Router DOM
+
+Axios
+
+Socket.io Client
+
+Framer Motion (for animations)
+
+Backend:
+
+Node.js
+
+Express.js
+
+CORS
+
+Dotenv
+
+Socket.io
+
+PostgreSQL (pg)]
