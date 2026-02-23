@@ -25,20 +25,41 @@ function AnalyticsDashboard() {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const user = JSON.parse(localStorage.getItem("user"));
+        const storedUser = localStorage.getItem("user");
 
-        const res = await api.get(`/analytics/${user.id}`);
+        if (!storedUser) {
+          setLoading(false);
+          return;
+        }
 
-        setEarningsData(res.data.monthlyEarnings || []);
-        setCropData(res.data.cropSales || []);
-        setTotalEarnings(res.data.totalEarnings || 0);
-        setTotalOrders(res.data.totalOrders || 0);
-        setTopCrop(res.data.topCrop || "N/A");
+        let user;
 
-        setLoading(false);
+        try {
+          user = JSON.parse(storedUser);
+        } catch {
+          setLoading(false);
+          return;
+        }
+
+        const userId = user?.id || user?._id;
+
+        if (!userId) {
+          setLoading(false);
+          return;
+        }
+
+        const res = await api.get(`/analytics/${userId}`);
+        const data = res?.data || {};
+
+        setEarningsData(data.monthlyEarnings ?? []);
+        setCropData(data.cropSales ?? []);
+        setTotalEarnings(data.totalEarnings ?? 0);
+        setTotalOrders(data.totalOrders ?? 0);
+        setTopCrop(data.topCrop ?? "N/A");
 
       } catch (err) {
-        console.error("Analytics error:", err);
+        console.error("Analytics error:", err?.response?.data || err.message);
+      } finally {
         setLoading(false);
       }
     };
@@ -55,7 +76,7 @@ function AnalyticsDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8 transition">
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-8">
 
       <motion.h1
         initial={{ opacity: 0 }}
@@ -65,24 +86,18 @@ function AnalyticsDashboard() {
         📊 Farmer Analytics Dashboard
       </motion.h1>
 
-      {/* Stats Cards */}
       <div className="grid md:grid-cols-3 gap-6 mt-8">
-
         <StatCard title="Total Earnings" value={`₹${totalEarnings}`} />
         <StatCard title="Total Orders" value={totalOrders} />
         <StatCard title="Top Crop" value={topCrop} />
-
       </div>
 
-      
       <motion.div
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className="bg-white dark:bg-gray-800 p-6 mt-10 rounded-2xl shadow-lg"
       >
-        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">
-          Monthly Earnings
-        </h2>
+        <h2 className="text-xl font-semibold mb-4">Monthly Earnings</h2>
 
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={earningsData}>
@@ -90,25 +105,17 @@ function AnalyticsDashboard() {
             <XAxis dataKey="month" />
             <YAxis />
             <Tooltip />
-            <Line 
-              type="monotone" 
-              dataKey="earnings" 
-              stroke="#16a34a" 
-              strokeWidth={3} 
-            />
+            <Line type="monotone" dataKey="earnings" stroke="#16a34a" strokeWidth={3}/>
           </LineChart>
         </ResponsiveContainer>
       </motion.div>
 
-      
       <motion.div
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className="bg-white dark:bg-gray-800 p-6 mt-10 rounded-2xl shadow-lg"
       >
-        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">
-          Crop Sales
-        </h2>
+        <h2 className="text-xl font-semibold mb-4">Crop Sales</h2>
 
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={cropData}>
